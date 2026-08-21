@@ -1,11 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryColumn } from "typeorm";
 
 @Entity('categories')
 export class CategoryOrmEntity {
-    @PrimaryGeneratedColumn('uuid')
+    @PrimaryColumn('uuid')
     id: string;
 
-    @Column()
+    @Column('varchar')
     name: string;
 
     @Column('int', { name: 'display_order' })

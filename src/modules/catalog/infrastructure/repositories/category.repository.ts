@@ -4,12 +4,13 @@ import { CategoryOrmEntity } from "../persistence/orm-entities/category.orm-enti
 import { Repository } from "typeorm";
 import { Category } from "../../domain/entities/category.entity";
 import { CategoryMapper } from "../persistence/mappers/category.mapper";
+import { InjectRepository } from "@nestjs/typeorm";
 
 @Injectable()
 export class CategoryRepositoty implements ICategoryRepository {
 
     constructor(
-        @Inject(CategoryOrmEntity) private readonly ormRepo: Repository<CategoryOrmEntity>,
+        @InjectRepository(CategoryOrmEntity) private readonly ormRepo: Repository<CategoryOrmEntity>,
     ) { }
 
     async save(category: Category): Promise<void> {

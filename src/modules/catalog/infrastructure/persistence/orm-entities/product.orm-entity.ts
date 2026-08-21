@@ -1,9 +1,9 @@
-import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
 import { CategoryOrmEntity } from "./category.orm-entity";
 
 @Entity('products')
 export class ProductOrmEntity {
-    @PrimaryGeneratedColumn('uuid')
+    @PrimaryColumn('uuid')
     id: string;
 
     @Column('uuid', { name: 'category_id' })
@@ -13,7 +13,7 @@ export class ProductOrmEntity {
     @JoinColumn({ name: 'category_id' })
     category: CategoryOrmEntity;
 
-    @Column()
+    @Column('varchar')
     name: string;
 
     @Column('text')

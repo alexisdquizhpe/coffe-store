@@ -9,6 +9,9 @@ import { UpdateProductDto } from './dtos/update-product.dto';
 import { UpdateProductCommand } from '../application/commands/UpdateProduct/update-product.command';
 import { PaginationQuery } from 'src/common/dto/pagination.dto';
 import { GetAllProductsQuery } from '../application/queries/GetAllProducts/get-all-products.query';
+import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
+import { RolesGuard } from 'src/shared/guards/roles.guard';
+import { Roles } from 'src/shared/decorators/roles.decorator';
 
 @Controller('catalog')
 export class ProductController {
@@ -25,8 +28,8 @@ export class ProductController {
     }
 
     @Post('products')
-    // @UseGuards(JwtAuthGuard, RolesGuard)
-    // @Roles('OWNER')
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles('OWNER')
     async create(@Body() dto: CreateProductDto) {
         return await this.commandBus.execute(
             new CreateProductCommand(dto.categoryId, dto.name, dto.description ?? '', dto.price, dto.imageUrl),
@@ -34,7 +37,7 @@ export class ProductController {
     }
 
     @Get('products')
-    // @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard)
     async getAll(@Query() query: PaginationQuery) {
         return await this.queryBus.execute(
             new GetAllProductsQuery(query.page, query.limit)
@@ -42,6 +45,8 @@ export class ProductController {
     }
 
     @Patch('products/:id')
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles('OWNER')
     async update(@Param('id', ParseUUIDPipe) id: string, @Body() dto: UpdateProductDto) {
         return await this.commandBus.execute(
             new UpdateProductCommand(id, dto.categoryId, dto.name, dto.description, dto.price, dto.imageUrl)
@@ -49,7 +54,8 @@ export class ProductController {
     }
 
     @Patch('products/:id/availability')
-    // @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles('OWNER')
     async toggleAvailability(@Param('id', ParseUUIDPipe) id: string, @Body() dto: ToggleAvailabilityDto) {
         await this.commandBus.execute(new ToggleAvailabilityCommand(id, dto.available));
         return { success: true };

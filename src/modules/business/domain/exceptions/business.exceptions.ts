@@ -53,3 +53,15 @@ export class BusinessProfileNotFoundException extends DomainException {
         super('El perfil del negocio no ha sido configurado', 'BUSINESS_PROFILE_NOT_FOUND');
     }
 }
+
+export class BusinessProfileAlreadyExistsException extends DomainException {
+    constructor() {
+        super('El perfil del negocio ya fue configurado, usa la actualización en vez de crear uno nuevo', 'BUSINESS_PROFILE_ALREADY_EXISTS');
+    }
+}
+
+export class IncompleteWeeklyScheduleException extends DomainException {
+    constructor() {
+        super('Debes enviar los 7 días de la semana (0 a 6), incluso los que están cerrados', 'INCOMPLETE_WEEKLY_SCHEDULE');
+    }
+}
